@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+.terraform.lock.hcl
+
+# Jenkins
+secrets/
+jenkins_home/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
