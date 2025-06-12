@@ -11,13 +11,12 @@
 // }
 
 
-
 // def call() {
 //     withCredentials([
 //         string(credentialsId: 'do-access-token', variable: 'DO_ACCESS_TOKEN'),
 //         usernamePassword(credentialsId: 'docr-creds', usernameVariable: 'DO_USER', passwordVariable: 'DO_PASS')
 //     ]) {
-//         sh '''
+//         sh """
 //             echo "✅ Installing doctl..."
 //             curl -sL https://github.com/digitalocean/doctl/releases/download/v1.108.0/doctl-1.108.0-linux-amd64.tar.gz -o doctl.tar.gz
 //             tar -xzf doctl.tar.gz
@@ -41,11 +40,12 @@
       
 //             echo "🔁 Replacing image tag with current build number..."
 //             sed -i 's|registry.digitalocean.com/mytest-registry/flask-app:latest|registry.digitalocean.com/mytest-registry/flask-app:${BUILD_NUMBER}|g' algotest-assignment/flask-app/k8s/deployment.yaml
+
 //             echo "✅ Deploying Kubernetes manifests..."
 //             kubectl apply -f algotest-assignment/flask-app/k8s/deployment.yaml
 //             kubectl apply -f algotest-assignment/flask-app/k8s/service.yaml
 //             kubectl apply -f algotest-assignment/flask-app/k8s/ingress.yaml
-//         '''
+//         """
 //     }
 // }
 
@@ -55,6 +55,9 @@ def call() {
         string(credentialsId: 'do-access-token', variable: 'DO_ACCESS_TOKEN'),
         usernamePassword(credentialsId: 'docr-creds', usernameVariable: 'DO_USER', passwordVariable: 'DO_PASS')
     ]) {
+        def buildNumber = env.BUILD_NUMBER
+        def imageName = "registry.digitalocean.com/mytest-registry/flask-app:${buildNumber}"
+
         sh """
             echo "✅ Installing doctl..."
             curl -sL https://github.com/digitalocean/doctl/releases/download/v1.108.0/doctl-1.108.0-linux-amd64.tar.gz -o doctl.tar.gz
@@ -76,11 +79,11 @@ def call() {
               --docker-server=registry.digitalocean.com \
               --docker-username=$DO_USER \
               --docker-password=$DO_PASS
-      
-            echo "🔁 Replacing image tag with current build number..."
-            sed -i 's|registry.digitalocean.com/mytest-registry/flask-app:latest|registry.digitalocean.com/mytest-registry/flask-app:${BUILD_NUMBER}|g' algotest-assignment/flask-app/k8s/deployment.yaml
 
-            echo "✅ Deploying Kubernetes manifests..."
+            echo "🔁 Replacing image tag with build number in deployment.yaml..."
+            sed -i 's|registry.digitalocean.com/mytest-registry/flask-app:.*|${imageName}|g' algotest-assignment/flask-app/k8s/deployment.yaml
+
+            echo "🚀 Deploying to Kubernetes..."
             kubectl apply -f algotest-assignment/flask-app/k8s/deployment.yaml
             kubectl apply -f algotest-assignment/flask-app/k8s/service.yaml
             kubectl apply -f algotest-assignment/flask-app/k8s/ingress.yaml
