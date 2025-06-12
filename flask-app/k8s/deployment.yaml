@@ -14,8 +14,6 @@ spec:
       labels:
         app: flask-app
     spec:
-      imagePullSecrets:
-        - name: docr-secret
       containers:
         - name: flask-app
           image: registry.digitalocean.com/algotest-registry/flask-app:latest
