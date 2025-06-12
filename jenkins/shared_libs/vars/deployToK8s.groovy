@@ -36,6 +36,12 @@ def call() {
             echo "PWD: \$(pwd)"
             ls -R
 
+            echo "✅ Installing doctl..."
+            curl -sL https://github.com/digitalocean/doctl/releases/download/v1.108.0/doctl-1.108.0-linux-amd64.tar.gz -o doctl.tar.gz
+            tar -xzf doctl.tar.gz
+            mv doctl /usr/local/bin/
+            chmod +x /usr/local/bin/doctl
+
             echo "✅ Setting up kubeconfig using doctl..."
             mkdir -p ~/.kube
 
@@ -49,5 +55,4 @@ def call() {
         """
     }
 }
-
 
