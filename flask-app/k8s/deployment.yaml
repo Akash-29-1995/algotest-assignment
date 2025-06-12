@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: registry.digitalocean.com/mytest-registry/flask-app:${BUILD_NUMBER}
+          image: registry.digitalocean.com/mytest-registry/flask-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5001
