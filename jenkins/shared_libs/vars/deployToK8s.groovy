@@ -13,6 +13,9 @@
 def call() {
     withCredentials([string(credentialsId: 'do-access-token', variable: 'DO_ACCESS_TOKEN')]) {
         sh '''
+            echo "PWD: $(pwd)"
+            ls -R
+            
             echo "✅ Setting up kubeconfig using doctl..."
             mkdir -p ~/.kube
 
