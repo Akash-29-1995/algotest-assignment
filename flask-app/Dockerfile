@@ -9,4 +9,4 @@ COPY app/ app/
 
 EXPOSE 5001
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5001", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "app:app:app"]
