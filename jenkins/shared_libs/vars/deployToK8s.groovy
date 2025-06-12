@@ -3,9 +3,9 @@ def call() {
         sh '''
             echo "PWD: $(pwd)"
             ls -R
-            kubectl apply -f flask-app/k8s/deployment.yaml
-            kubectl apply -f flask-app/k8s/service.yaml
-            kubectl apply -f flask-app/k8s/ingress.yaml
+            kubectl apply -f algotest-assignment/flask-app/k8s/deployment.yaml
+            kubectl apply -f algotest-assignment/flask-app/k8s/service.yaml
+            kubectl apply -f algotest-assignment/flask-app/k8s/ingress.yaml
         '''
     }
 }
