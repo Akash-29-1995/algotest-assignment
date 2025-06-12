@@ -1,4 +1,4 @@
-# 🚀 AlgoTest DevOps Assignment – Flask App Deployment on Kubernetes
+# 🚀  Flask App Deployment on Kubernetes
 
 This repository is part of the **AlgoTest DevOps interview assignment**. It demonstrates a complete CI/CD pipeline and infrastructure automation solution to deploy a containerized Python Flask application to a **Kubernetes cluster on DigitalOcean** using **Terraform** and **Jenkins**.
 
