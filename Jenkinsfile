@@ -41,11 +41,33 @@ pipeline {
     stage('Verify Deployment') {
       steps {
         script {
-          def lb_ip = sh(script: "kubectl get svc flask-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'", returnStdout: true).trim()
-          echo "LoadBalancer IP: ${lb_ip}"
-          sh "curl -f http://${lb_ip}/health || exit 1"
+          withKubeConfig([credentialsId: 'do-kubeconfig']) {
+            echo "⏳ Waiting for LoadBalancer IP..."
+
+            // Wait until External IP is available (max 2 min)
+            timeout(time: 2, unit: 'MINUTES') {
+              waitUntil {
+                def ip = sh(script: "kubectl get svc flask-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'", returnStdout: true).trim()
+                return ip && ip != "''" && ip != ""
+              }
+            }
+
+            // Get IP and verify app is reachable
+            def lb_ip = sh(script: "kubectl get svc flask-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'", returnStdout: true).trim()
+            echo "🌍 LoadBalancer IP: ${lb_ip}"
+            sh "curl -f http://${lb_ip}/health || exit 1"
+          }
         }
       }
+    }
+  }
+
+  post {
+    success {
+      echo "🎉 Deployment completed successfully!"
+    }
+    failure {
+      echo "❌ Deployment failed. Check logs for details."
     }
   }
 }
