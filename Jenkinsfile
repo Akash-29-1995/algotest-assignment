@@ -14,12 +14,13 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
-      steps {
-        script {
-          buildImage()
-        }
-      }
+     stage('Build Docker Image') {
+            steps {
+                script {
+                    // 👇 pass image name directly
+                    buildImage("registry.digitalocean.com/mytest-registry/flask-app:${env.BUILD_NUMBER}")
+                }
+            }
     }
 
     stage('Push to DOCR') {
