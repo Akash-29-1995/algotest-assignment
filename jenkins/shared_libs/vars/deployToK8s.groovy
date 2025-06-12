@@ -81,7 +81,10 @@ def call() {
               --docker-server=registry.digitalocean.com \
               --docker-username=$DO_USER \
               --docker-password=$DO_PASS
-
+      
+            echo "🔁 Replacing image tag with current build number..."
+            sed -i "s|registry.digitalocean.com/algotest-registry/flask-app:latest|registry.digitalocean.com/algotest-registry/flask-app:${BUILD_NUMBER}|g" algotest-assignment/flask-app/k8s/deployment.yaml
+            
             echo "✅ Deploying Kubernetes manifests..."
             kubectl apply -f algotest-assignment/flask-app/k8s/deployment.yaml
             kubectl apply -f algotest-assignment/flask-app/k8s/service.yaml
